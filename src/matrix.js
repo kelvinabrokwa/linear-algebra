@@ -1,3 +1,8 @@
+import multiply from './multiply';
+import determinant from './determinant';
+import transpose from './transpose';
+import rank from './rank';
+
 /**
  * Matrix object
  * @param {Array} matrix
@@ -17,33 +22,7 @@ export default class Matrix {
      * @returns {Matrix} a new matrix object with the product of the two matrices
      */
     multiply(matrix) {
-        if (this.cols !== matrix.rows) {
-            throw 'matrix size mismatch';
-        }
-
-        var out = [];
-        var row, col;
-        for (var r = 0; r < this.rows; r++) {
-            row = this.matrix[r];
-            out.push([]);
-            for (var c = 0; c < matrix.col; c++) {
-                col = matrix.getColumn(c);
-                out[r][c] = 0;
-                for (var i = 0; i < col.length; i++) {
-                    out[r][c] += row[r] * col[i];
-                }
-            }
-        }
-        return new Matrix(out);
-    }
-
-    /**
-     * post multiplication
-     * @param {Matrix} matrix
-     * @returns {Matrix} a new matrix object with the product of the two matrices
-     */
-    postMultiply(matrix) {
-        this.multiply(matrix);
+        return this.preMultiply(this, matrix);
     }
 
     /**
@@ -52,7 +31,16 @@ export default class Matrix {
      * @returns {Matrix} a new matrix object with the product of the two matrices
      */
     preMultiply(matrix) {
-        matrix.multiply(this.matrix);
+        return multiply(this, matrix);
+    }
+
+    /**
+     * post multiplication
+     * @param {Matrix} matrix
+     * @returns {Matrix} a new matrix object with the product of the two matrices
+     */
+    postMultiply(matrix) {
+        return multiply(matrix, this);
     }
 
     /**
@@ -72,16 +60,19 @@ export default class Matrix {
     }
 
     /**
+     * calculate the transpose of the matrix
+     * @returns {Matrix} a new matrix
+     */
+    transpose() {
+        return transpose(this);
+    }
+
+    /**
      * get the determinant of the matrix
      * @returns {Number} the determinant of a square matrix
      */
     determinant() {
-        if (this.determinant) {
-            return this.determinant;
-        }
-        if (!this.isSquare) {
-            throw 'determinant is only defined for square matrices';
-        }
+        return determinant(this);
     }
 
     /**
@@ -89,8 +80,6 @@ export default class Matrix {
      * @returns {Number} rank of the matrix
      */
     rank() {
-        if (this.rank) {
-            return this.rank;
-        }
+        return rank(this);
     }
 }
