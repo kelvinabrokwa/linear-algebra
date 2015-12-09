@@ -3,6 +3,11 @@
   "version": "0.0.1",
   "description": "linear algebra",
   "main": "index.js",
+  "browserify": {
+    "transform": [
+      "babelify"
+    ]
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,6 +22,8 @@
   },
   "homepage": "https://github.com/kelvinabrokwa/linear-algebra#readme",
   "devDependencies": {
+    "babelify": "^7.2.0",
+    "browserify": "^12.0.1",
     "tape": "^4.2.2"
   }
 }
