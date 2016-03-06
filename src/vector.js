@@ -9,4 +9,11 @@ export default class Vector {
     this.size = this.vector.length;
   }
 
+  get(i) {
+    if (i > this.size - 1 || i < 0) {
+      throw new Error('index out of bounds');
+    }
+    return this.vector[i];
+  }
+
 }
