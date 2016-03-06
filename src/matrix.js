@@ -1,41 +1,71 @@
-import multiply from './multiply';
-import determinant from './determinant';
-import transpose from './transpose';
 import rank from './rank';
+import isSPD from './is_spd';
+import multiply from './multiply';
+import transpose from './transpose';
+import getColumn from './get_column';
+import rowReduce from './row_reduce';
+import isDiagonal from './is_diagonal';
+import determinant from './determinant';
+import isDiagonallyDominant from './is_diagonally_dominant';
 
 /**
  * Matrix object
- * @param {Array} matrix
+ * @param {Array<Array<Number>>} matrix
  */
 export default class Matrix {
 
     constructor(matrix) {
-        this.matrix = JSON.parse(JSON.stringify(matrix)); // deep copy
-        this.rows = this.matrix.length;
-        this.cols = this.matrix[0].length;
-        this.isSquare = this.rows === this.cols;
+      this.matrix = JSON.parse(JSON.stringify(matrix)); // deep copy
+      this.rows = this.matrix.length;
+      this.cols = this.matrix[0].length;
+      this.isSquare = this.rows === this.cols;
     }
 
     /**
-     * post multiplication
+     * Get the element at the specified entry
+     * @param {Array<Number>} coordinates
+     * @returns {Number}
+     */
+    get(c) {
+      return this.matrix[c[0]][c[1]];
+    }
+
+    /**
+     * Clone the matrix
+     * @returns {Matrix} a deep clone of the matrix
+     */
+    clone() {
+      return new Matrix(this.matrix);
+    }
+
+    /**
+     * Check if the matrix is square
+     * @returns {Boolean} true if the matrix is square
+     */
+    isSquare() {
+      return this.isSquare;
+    }
+
+    /**
+     * Post multiplication
      * @param {Matrix} matrix
      * @returns {Matrix} a new matrix object with the product of the two matrices
      */
     multiply(matrix) {
-        return this.preMultiply(this, matrix);
+      return this.preMultiply(this, matrix);
     }
 
     /**
-     * pre multiplication
+     * Pre multiplication
      * @param {Matrix} matrix
      * @returns {Matrix} a new matrix object with the product of the two matrices
      */
     preMultiply(matrix) {
-        return multiply(this, matrix);
+      return multiply(this, matrix);
     }
 
     /**
-     * post multiplication
+     * Post multiplication
      * @param {Matrix} matrix
      * @returns {Matrix} a new matrix object with the product of the two matrices
      */
@@ -49,14 +79,7 @@ export default class Matrix {
      * @returns {Vector} the column located at the given index
      */
     getColumn(col) {
-        if (col >= this.cols) {
-            throw 'column index out of bounds';
-        }
-        var column = [];
-        for (var row = 0; row < this.matrix.length; row++) {
-            column.push(this.matrix[row][col]);
-        }
-        return column;
+      return getColumn(this, col);
     }
 
     /**
@@ -64,7 +87,7 @@ export default class Matrix {
      * @returns {Matrix} a new matrix
      */
     transpose() {
-        return transpose(this);
+      return transpose(this);
     }
 
     /**
@@ -72,7 +95,7 @@ export default class Matrix {
      * @returns {Number} the determinant of a square matrix
      */
     determinant() {
-        return determinant(this);
+      return determinant(this);
     }
 
     /**
@@ -80,6 +103,38 @@ export default class Matrix {
      * @returns {Number} rank of the matrix
      */
     rank() {
-        return rank(this);
+      return rank(this);
+    }
+
+    /**
+     * Checks if a matrix is Symmetric Positive Definite
+     * @returns {Boolean} true if the matrix is SPD
+     */
+    isSPD() {
+      return isSPD(this);
+    }
+
+    /**
+     * Checks if a matrix is diagonally dominant
+     * @returns {Boolean} true if the matrix is diagonally dominant
+     */
+    isDiagnoallyDominant() {
+      return isDiagonallyDominant(this);
+    }
+
+    /**
+     * Checks if a matrix is a diagonal
+     * @returns {Boolean} true if the matrix is diagonal
+     */
+    isDiagonal() {
+      return isDiagonal(this);
+    }
+
+    /**
+     * Reduces the matrix to row-echelon form
+     * @returns {Matrix} row reduced matrix
+     */
+    rowReduce() {
+      return rowReduce(this);
     }
 }

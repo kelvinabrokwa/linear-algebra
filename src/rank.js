@@ -3,10 +3,14 @@
  * @param {Matrix} matrix
  * @return {Number} rank of the matrix
  */
-export default function(matrix) {
-    if (matrix.rank) {
-        return matrix.rank;
-    }
-    // to do
-    return null;
+export default function(m) {
+  if (m.rank) {
+    return m.rank;
+  }
+  var sum = 0;
+  for (var i = 0; i < m.rows; i++) {
+    sum += m.get([i, i]);
+  }
+  m.rank = sum;
+  return sum;
 }
