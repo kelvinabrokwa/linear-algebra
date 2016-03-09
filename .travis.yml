@@ -1,4 +1,4 @@
 install:
-    - npm install -g smokestack tap-status tap-closer
+    - npm install -g babel-tape-runner
     - npm install
 script: npm run test

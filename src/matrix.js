@@ -1,4 +1,5 @@
 import rank from './rank';
+import types from './types';
 import isSPD from './is_spd';
 import equals from './equals';
 import multiply from './multiply';
@@ -17,6 +18,7 @@ export default class Matrix {
 
   constructor(matrix) {
     this.matrix = JSON.parse(JSON.stringify(matrix)); // deep copy
+    this.type = types.MATRIX;
     this.rows = this.matrix.length;
     this.cols = this.matrix[0].length;
     this.isSquare = this.rows === this.cols;
