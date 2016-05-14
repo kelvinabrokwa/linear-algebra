@@ -1,5 +1,5 @@
-import rank from './rank';
 import types from './types';
+import trace from './trace';
 import isSPD from './is_spd';
 import equals from './equals';
 import multiply from './multiply';
@@ -9,6 +9,7 @@ import rowReduce from './row_reduce';
 import isDiagonal from './is_diagonal';
 import determinant from './determinant';
 import isDiagonallyDominant from './is_diagonally_dominant';
+import isStrictlyDiagonallyDominant from './is_strictly_diagonally_dominant';
 
 /**
  * Matrix object
@@ -21,6 +22,9 @@ export default class Matrix {
     this.type = types.MATRIX;
     this.rows = this.matrix.length;
     this.cols = this.matrix[0].length;
+    this.length = this.rows;
+    this.width = this.cols;
+    this.size = [this.rows, this.cols];
     this.isSquare = this.rows === this.cols;
   }
 
@@ -31,7 +35,7 @@ export default class Matrix {
    */
   get(c) {
     if (c[0] >= this.rows || c[1] >= this.cols) {
-      throw new Error('index out of bounds');
+      throw new Error('Index out of bounds: your matrix is ' + this.rows + 'x' + this.cols);
     }
     return this.matrix[c[0]][c[1]];
   }
@@ -43,7 +47,7 @@ export default class Matrix {
    */
   set(c, val) {
     if (c[0] >= this.rows || c[1] >= this.cols) {
-      throw new Error('index out of bounds');
+      throw new Error('Index out of bounds');
     }
     this.matrix[c[0]][c[1]] = val;
     return this;
@@ -119,11 +123,11 @@ export default class Matrix {
   }
 
   /**
-   * get the rank of the matrix
-   * @returns {Number} rank of the matrix
+   * get the trace of the matrix
+   * @returns {Number} trace of the matrix
    */
-  rank() {
-    return rank(this);
+  trace() {
+    return trace(this);
   }
 
   /**
@@ -138,8 +142,22 @@ export default class Matrix {
    * Checks if a matrix is diagonally dominant
    * @returns {Boolean} true if the matrix is diagonally dominant
    */
-  isDiagnoallyDominant() {
+  isDiagonallyDominant() {
+    if (!this.isSquare) {
+      throw new Error('Diagonal dominance is only defined on square matrices');
+    }
     return isDiagonallyDominant(this);
+  }
+
+  /**
+   * Checks if the matrix is strictly diagonally dominant
+   * @return {Boolean} true if the matrix is strictly diagonally dominant
+   */
+  isStrictlyDiagonallyDominant() {
+    if (!this.isSquare) {
+      throw new Error('Diagonal dominance is only defined on square matrices');
+    }
+    return isStrictlyDiagonallyDominant(this);
   }
 
   /**
